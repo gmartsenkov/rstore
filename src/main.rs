@@ -1,4 +1,4 @@
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, RwLock};
 use regex::Regex;
 use lazy_static::lazy_static;
 use std::collections::HashMap;
@@ -14,7 +14,7 @@ lazy_static! {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let db : Arc<Mutex<HashMap<String, String>>> = Arc::new(Mutex::new(HashMap::new()));
+    let db : Arc<RwLock<HashMap<String, String>>> = Arc::new(RwLock::new(HashMap::new()));
     let mut listener = TcpListener::bind("127.0.0.1:8080").await?;
 
     loop {
@@ -31,7 +31,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 let key = &captures[1];
                 let value = &captures[2];
 
-                db_clone.lock().unwrap().insert(String::from(key), String::from(value));
+                db_clone.write().unwrap().insert(String::from(key), String::from(value));
                 socket.write_all("OK\n".as_bytes()).await.unwrap();
             };
 
@@ -40,7 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 let key = &captures[1];
                 let mut result = String::new();
 
-                 match db_clone.lock().unwrap().get(key) {
+                 match db_clone.read().unwrap().get(key) {
                     None => {},
                     Some(value) => { result = String::from(value) }
                 };
