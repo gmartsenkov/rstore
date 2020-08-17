@@ -9,4 +9,4 @@ edition = "2018"
 [dependencies]
 regex = "1"
 lazy_static = "1.4.0"
-tokio = { version = "0.2.22", features = ["full"] }
+tokio = { version = "0.2.22", features = ["rt-core", "io-util", "tcp", "dns", "macros"] }
