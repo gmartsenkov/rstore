@@ -1,5 +1,6 @@
 use std::sync::{Arc,RwLock};
 use std::collections::HashMap;
+use crate::logger;
 
 pub (super) type Db = Arc<RwLock<HashMap<String, String>>>;
     
@@ -9,16 +10,25 @@ pub fn create() -> Db {
 
 pub (super) fn read(database : &Db, key : &str) -> Option<String> {
     match database.read().unwrap().get(key) {
-        None => return None,
-        Some(v) => return Some(v.clone())
+        None => {
+            logger::trace!("STORE READ: {}, VALUE: NOT FOUND", key);
+            None
+        },
+        Some(v) => {
+            logger::trace!("STORE READ: {}, VALUE: {}", key, v);
+            Some(v.clone())
+        }
     }
 }
 
 pub (super) fn insert(database : &Db, key : &str, value : &str) -> Option<String> {
-    match database.write().unwrap().insert(key.to_string(), value.to_string()) {
-        None => return None,
-        Some(v) => return Some(v.clone())
-    }
+    let result = match database.write().unwrap().insert(key.to_string(), value.to_string()) {
+        None => None,
+        Some(v) => Some(v.clone())
+    };
+
+    logger::trace!("STORE WRITE: {}, VALUE: {}", key, value);
+    result
 }
 
 #[cfg(test)]
