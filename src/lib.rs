@@ -1,8 +1,11 @@
 pub mod logger;
 pub mod db;
+pub mod memory_spy;
 mod commands;
 
-pub fn process(database : &db::Db, data : &str) -> Result<String, u8> {
+use memory_spy::ArcMemorySpy;
+
+pub fn process(database : &db::Db, memspy : &ArcMemorySpy, data : &str) -> Result<String, u8> {
     for command in commands::COMMANDS.iter() {
         match command(database, data) {
             Some(v) => { return Ok(v); },
