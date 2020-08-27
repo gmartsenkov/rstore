@@ -39,8 +39,8 @@ impl MemorySpy {
                 logger::trace!("MemorySpy Channel Received");
 
                 let mut mem = memspy_clone.write().unwrap();
-                mem.keys_bytes = received.keys_bytes;
-                mem.values_bytes = received.values_bytes;
+                mem.keys_bytes += received.keys_bytes;
+                mem.values_bytes += received.values_bytes;
             }
         });
 

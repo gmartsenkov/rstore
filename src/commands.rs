@@ -42,11 +42,16 @@ fn set_command(database : &db::Db, data : &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
 
+    use std::sync::Mutex;
+    use std::sync::mpsc::{Sender, Receiver, channel};
+    use crate::db::{DbStats, create};
     use super::*;
     
     #[test]
     fn test_get_command_when_regex_does_not_match() {
-        let db = db::create();
+        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let stats_sender = Mutex::new(sender);
+        let db = create(stats_sender);
 
         assert_eq!(
             get_command(&db, "INVALID"),
@@ -56,7 +61,9 @@ mod tests {
 
     #[test]
     fn test_get_command_when_key_does_not_exist() {
-        let db = db::create();
+        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let stats_sender = Mutex::new(sender);
+        let db = create(stats_sender);
 
         assert_eq!(
             get_command(&db, "GET(KEY: \"TEST\")"),
@@ -66,7 +73,9 @@ mod tests {
 
     #[test]
     fn test_get_command_when_key_exists() {
-        let db = db::create();
+        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let stats_sender = Mutex::new(sender);
+        let db = create(stats_sender);
 
         db::insert(&db, "TEST", "VALUE");
 
@@ -78,7 +87,9 @@ mod tests {
 
     #[test]
     fn test_set_command_when_regex_does_not_match() {
-        let db = db::create();
+        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let stats_sender = Mutex::new(sender);
+        let db = create(stats_sender);
 
         assert_eq!(
             set_command(&db, "INVALID"),
@@ -88,7 +99,9 @@ mod tests {
 
     #[test]
     fn test_set_command_writes_to_the_db() {
-        let db = db::create();
+        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let stats_sender = Mutex::new(sender);
+        let db = create(stats_sender);
 
         assert_eq!(
             set_command(&db, "SET(KEY: \"TEST\", VALUE: \"BMW\")"),
