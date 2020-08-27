@@ -24,7 +24,7 @@ mod tests {
     
     #[test]
     fn test_process_command_not_found() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
@@ -36,7 +36,7 @@ mod tests {
 
     #[test]
     fn test_process_get_command() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
@@ -50,7 +50,7 @@ mod tests {
 
     #[test]
     fn test_process_set_command() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 

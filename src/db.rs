@@ -71,7 +71,7 @@ mod tests {
 
     #[test]
     fn test_read_when_entry_does_not_exist() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
@@ -80,7 +80,7 @@ mod tests {
 
     #[test]
     fn test_read_when_entry_exists() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
@@ -125,7 +125,7 @@ mod tests {
 
         assert_eq!(
             receiver.recv().unwrap(),
-            DbStats{key_bytes: 0, value_bytes: 5 - 9}
+            DbStats{key_bytes: 0, value_bytes: -4}
         );
 
         assert_eq!(read(&db, "key"), Some("new value".to_string()))

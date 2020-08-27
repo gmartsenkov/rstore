@@ -49,7 +49,7 @@ mod tests {
     
     #[test]
     fn test_get_command_when_regex_does_not_match() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
@@ -61,7 +61,7 @@ mod tests {
 
     #[test]
     fn test_get_command_when_key_does_not_exist() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
@@ -73,7 +73,7 @@ mod tests {
 
     #[test]
     fn test_get_command_when_key_exists() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
@@ -87,7 +87,7 @@ mod tests {
 
     #[test]
     fn test_set_command_when_regex_does_not_match() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
@@ -99,7 +99,7 @@ mod tests {
 
     #[test]
     fn test_set_command_writes_to_the_db() {
-        let (sender, receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
+        let (sender, _receiver) : (Sender<DbStats>, Receiver<DbStats>) = channel();
         let stats_sender = Mutex::new(sender);
         let db = create(stats_sender);
 
